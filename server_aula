@@ -1,0 +1,29 @@
+server {
+
+root /var/www/html/aula/;
+index index.php;
+server_name XXXXXXXXXX;
+
+location / {
+        try_files $uri $uri/ =404;
+}
+
+location /dataroot/ {
+        internal;
+        alias /var/www/data/data_aula/;
+}
+
+error_page 404 /index.php;
+
+client_max_body_size 30M;
+        client_body_buffer_size 1024k;
+
+location ~ [^/]\.php(/|$) {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+}
+
+}
+
